@@ -1,0 +1,53 @@
+name: Github Create Environments
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - run: echo "Created 'dev' environment"
+
+  qa:
+    runs-on: ubuntu-latest
+    environment: qa
+    steps:
+      - run: echo "Created 'qa' environment"
+
+  prod-artifacts:
+    runs-on: ubuntu-latest
+    environment: prod-artifacts
+    steps:
+      - run: echo "Created 'prod-artifacts' environment"
+
+  demo:
+    runs-on: ubuntu-latest
+    environment: demo
+    steps:
+      - run: echo "Created 'demo' environment"
+  
+  staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - run: echo "Created 'staging' environment"
+
+  prod-na:
+    runs-on: ubuntu-latest
+    environment: prod-na
+    steps:
+      - run: echo "Created 'prod-na' environment"
+  
+  prod-emea:
+    runs-on: ubuntu-latest
+    environment: prod-emea
+    steps:
+      - run: echo "Created 'prod-emea' environment"
+  
+  prod-apac:
+    runs-on: ubuntu-latest
+    environment: prod-apac
+    steps:
+      - run: echo "Created 'prod-apac' environment"
