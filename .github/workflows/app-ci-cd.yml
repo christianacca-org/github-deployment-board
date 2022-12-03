@@ -1,0 +1,69 @@
+name: Application CI/CD
+
+on:
+  # trigger when branch is created
+  create:
+
+  # Triggers the workflow on push or pull request events but only for the master or release branch
+  push:
+    branches:
+      - master
+      - release/**
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - master
+      - release/**
+    
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+    
+permissions:
+  actions: read
+  contents: read
+  
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_CONFIGURATION: Release
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Build
+        run: dotnet build -c ${{ env.BUILD_CONFIGURATION }}
+
+#  deploy-dev:
+#    needs: [globalvars, build]
+#    if: needs.globalvars.outputs.createRelease == 'true'
+#    uses: ./.github/workflows/__app-deploy.yml
+#    with:
+#      docker-image-tag: ${{ needs.globalvars.outputs.buildTag }}
+#      docker-registry: ${{ needs.globalvars.outputs.acrName }}
+#      environment-name: dev
+#      git-tag: ${{ needs.globalvars.outputs.gitTag }}
+#    secrets: inherit
+#    permissions:
+#      actions: read
+#      contents: read
+#      id-token: write
+#
+#  deploy-qa:
+#    needs: [globalvars, deploy-dev]
+#    uses: ./.github/workflows/__app-deploy.yml
+#    with:
+#      docker-image-tag: ${{ needs.globalvars.outputs.buildTag }}
+#      docker-registry: ${{ needs.globalvars.outputs.acrName }}
+#      environment-name: qa
+#      git-tag: ${{ needs.globalvars.outputs.gitTag }}
+#    secrets: inherit
+#    permissions:
+#      actions: read
+#      contents: read
+#      id-token: write
