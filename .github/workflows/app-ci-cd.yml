@@ -45,7 +45,21 @@ jobs:
     environment: dev
     steps:
       - name: Deploy
+        id: deploy
         run: echo 'Deployed to dev'
+        continue-on-error: true  #Setting to true so the deployment board can be updated, even if this fails
+      - name: Update deployment board with all values provided
+        continue-on-error: true                             # Setting to true so the job doesn't fail if updating the board fails.
+        uses: im-open/update-deployment-board@v1.5.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN}}
+          environment: dev
+          board-number: 2
+          ref: ${{ github.ref_name }}
+          deploy-status: ${{ steps.deploy.outcome }}        # outcome is the result of the step before continue-on-error is applied
+      - name: Now Fail the job if the deploy step failed
+        if: steps.deploy.outcome == 'failure'
+        run: exit 1
 
   deploy-qa:
     needs: deploy-dev
