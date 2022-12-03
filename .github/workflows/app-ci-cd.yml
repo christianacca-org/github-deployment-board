@@ -54,7 +54,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN}}
           environment: dev
-          board-number: 2
+          board-number: 1
           ref: ${{ github.ref_name }}
           deploy-status: ${{ steps.deploy.outcome }}        # outcome is the result of the step before continue-on-error is applied
       - name: Now Fail the job if the deploy step failed
