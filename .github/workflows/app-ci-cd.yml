@@ -39,31 +39,18 @@ jobs:
       - name: Build
         run: dotnet build -c ${{ env.BUILD_CONFIGURATION }}
 
-#  deploy-dev:
-#    needs: [globalvars, build]
-#    if: needs.globalvars.outputs.createRelease == 'true'
-#    uses: ./.github/workflows/__app-deploy.yml
-#    with:
-#      docker-image-tag: ${{ needs.globalvars.outputs.buildTag }}
-#      docker-registry: ${{ needs.globalvars.outputs.acrName }}
-#      environment-name: dev
-#      git-tag: ${{ needs.globalvars.outputs.gitTag }}
-#    secrets: inherit
-#    permissions:
-#      actions: read
-#      contents: read
-#      id-token: write
-#
-#  deploy-qa:
-#    needs: [globalvars, deploy-dev]
-#    uses: ./.github/workflows/__app-deploy.yml
-#    with:
-#      docker-image-tag: ${{ needs.globalvars.outputs.buildTag }}
-#      docker-registry: ${{ needs.globalvars.outputs.acrName }}
-#      environment-name: qa
-#      git-tag: ${{ needs.globalvars.outputs.gitTag }}
-#    secrets: inherit
-#    permissions:
-#      actions: read
-#      contents: read
-#      id-token: write
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Deploy
+        run: echo 'Deployed to dev'
+
+  deploy-qa:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: qa
+    steps:
+      - name: Deploy
+        run: echo 'Deployed to dev'
